@@ -1,7 +1,10 @@
 package com.bbking.milk.mapper;
 
+import org.springframework.stereotype.Repository;
+
 import com.bbking.milk.entity.User;
 
+@Repository
 public interface UserMapper {
     int deleteByPrimaryKey(Long id);
 

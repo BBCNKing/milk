@@ -1,7 +1,9 @@
 package com.bbking.milk.mapper;
 
-import com.bbking.milk.entity.Goods;
+import org.springframework.stereotype.Repository;
 
+import com.bbking.milk.entity.Goods;
+@Repository
 public interface GoodsMapper {
     int deleteByPrimaryKey(Long goodsId);
 

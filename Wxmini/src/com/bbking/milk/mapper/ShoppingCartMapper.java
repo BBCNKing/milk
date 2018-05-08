@@ -1,7 +1,9 @@
 package com.bbking.milk.mapper;
 
-import com.bbking.milk.entity.ShoppingCart;
+import org.springframework.stereotype.Repository;
 
+import com.bbking.milk.entity.ShoppingCart;
+@Repository
 public interface ShoppingCartMapper {
     int deleteByPrimaryKey(Long orderId);
 

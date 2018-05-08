@@ -1,7 +1,9 @@
 package com.bbking.milk.mapper;
 
-import com.bbking.milk.entity.Order;
+import org.springframework.stereotype.Repository;
 
+import com.bbking.milk.entity.Order;
+@Repository
 public interface OrderMapper {
     int deleteByPrimaryKey(Long orderId);
 

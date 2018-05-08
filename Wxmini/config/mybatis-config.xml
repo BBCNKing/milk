@@ -3,8 +3,75 @@
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
+	<context:component-scan base-package="com.bbking.milk,com.guddqs.wxmini">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+	</context:component-scan>
+	
+		<!-- 引入配置文件 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:jdbc.properties" />
+	</bean>
+	
+	  <!-- 配置dbcp数据源 -->  
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">  
+		<property name="driverClassName" value="${driver}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="${initialSize}"></property>
+		<!-- 连接池最大数量 -->
+		<property name="maxActive" value="${maxActive}"></property>
+		<!-- 连接池最大空闲 -->
+		<property name="maxIdle" value="${maxIdle}"></property>
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${minIdle}"></property>
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="${maxWait}"></property>
+		<!-- 有效性检查 -->
+		<property name="validationQuery" value="select 1"/>
+		<property name="testOnBorrow" value="false"/>
+		<property name="testWhileIdle" value="true"/>
+		<property name="testOnReturn" value="false"/>
+		<property name="numTestsPerEvictionRun" value="${maxActive}"/>
+		<!-- 5 min 每5分钟检测空闲连接超过10分钟的连接-->
+		<property name="timeBetweenEvictionRunsMillis" value="300000" />  
+		<property name="minEvictableIdleTimeMillis" value="600000" /> 
+		<property name="removeAbandoned" value="true"/>
+    </bean>  
+	
+	
+    <!-- 配置mybatisSqlSessionFactoryBean -->  
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />  
+<!--         <property name="configLocation" value="classpath:mybatis-config.xml"/> -->  
+        <property name="mapperLocations" value="classpath*:com/bbking/milk/**/*Mapper.xml"/>
+    </bean>  
+
+    <!-- 配置SqlSessionTemplate -->  
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">  
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />  
+    </bean>  
+
+    <!-- 配置mybatis mapper接口 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.bbking.milk.**.dao"/>
+        <property name="sqlSessionTemplateBeanName" value="sqlSessionTemplate"/>
+    </bean>
+
+    <!-- 事务配置 -->  
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+        <property name="dataSource" ref="dataSource" />  
+    </bean>  
+
+    <!-- 使用annotation注解方式配置事务 -->  
+    <tx:annotation-driven transaction-manager="transactionManager"/>  
+    
+<!--     
 	<typeAliases>
-		<package name="com.guddqs.wxmini.entity" />
-	</typeAliases>
+		<package name="com.guddqs.wxmini.entity,com.bbking.milk" />
+	</typeAliases> -->
 
 </configuration>
