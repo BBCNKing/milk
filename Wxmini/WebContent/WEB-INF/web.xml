@@ -3,11 +3,8 @@
   <display-name>WX_MILK</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
     <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>/createFile</welcome-file>  
   </welcome-file-list>
   <context-param>
     <param-name>contextConfigLocation</param-name>
@@ -16,8 +13,23 @@
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+  <!-- 404问题 -->
   <servlet>
-    <servlet-name>springmvc</servlet-name>
+    <servlet-name>default</servlet-name>
+    <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+    <init-param>
+        <param-name>debug</param-name>
+        <param-value>0</param-value>
+    </init-param>
+    <init-param>
+        <param-name>listings</param-name>
+        <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>SpringMVC</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
     <init-param>
       <param-name>contextConfigLocation</param-name>
@@ -25,8 +37,8 @@
     </init-param>
   </servlet>
   <servlet-mapping>
-    <servlet-name>springmvc</servlet-name>
-    <url-pattern>*.do</url-pattern>
+    <servlet-name>SpringMVC</servlet-name>
+    <url-pattern>/*</url-pattern>
   </servlet-mapping>
   <filter>
     <filter-name>encodingFilter</filter-name>
@@ -48,7 +60,7 @@
     <error-code>500</error-code>
     <location>/error/404.html</location>
   </error-page>
-  <context-param>  
+<!--   <context-param>  
     <param-name>spring.profiles.active</param-name>  
     <param-value>dev</param-value>  
   </context-param>  
@@ -59,5 +71,5 @@
   <context-param>  
     <param-name>spring.liveBeansView.mbeanDomain</param-name>  
     <param-value>dev</param-value>  
-  </context-param>  
+  </context-param>   -->
 </web-app>
